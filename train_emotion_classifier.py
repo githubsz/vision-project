@@ -1,4 +1,4 @@
-from keras.layers import Dense, Flatten
+from keras.layers import Dense, Flatten, Dropout
 from keras.models import Sequential
 from keras.callbacks import Callback
 import pandas as pd
@@ -54,10 +54,21 @@ val_faces /= 255.
 
 model = Sequential()
 model.add(Flatten(input_shape=input_shape))
+model.add(Dropout(0.5))
+model.add(Dense(100, activation="relu"))
+# model.add(Dense(100, activation="relu"))
+# model.add(Dense(100, activation="softmax"))
+# model.add(Dropout(0.5))
+model.add(Dense(num_classes, activation="relu"))
 model.add(Dense(num_classes, activation="softmax"))
-
-model.compile(optimizer='adam', loss='categorical_crossentropy',
+# model.add(Dropout(0.5))
+# model.compile(optimizer='adam', loss='categorical_crossentropy',
+# metrics=['accuracy'])
+model.compile(optimizer='adam', loss='binary_crossentropy',
 metrics=['accuracy'])
+# model.compile(optimizer='adam', loss='sparse_categorical_crossentropy',
+# metrics=['accuracy'])
+
 
 model.fit(train_faces, train_emotions, batch_size=config.batch_size,
         epochs=config.num_epochs, verbose=1, callbacks=[
